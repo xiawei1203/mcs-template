@@ -18,9 +18,8 @@ function render(props = {}) {
   .use(store)
   .use(router)
   .use(ElementUI,{locale})
-  instance.mount(container ? container.querySelector("#app") : "#app")
-
   installGlobalComponent(instance)
+  instance.mount(container ? container.querySelector("#app") : "#app")
 }
 
 

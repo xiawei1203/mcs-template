@@ -1,0 +1,87 @@
+/**
+ * 设计 token（第一优先级样式来源）
+ *
+ * 所有页面、组件、Element Plus 覆盖样式只允许引用这里的变量，禁止在 SFC 内硬编码色值、圆角与间距。
+ * 子应用需要换主色时，只改 --mcs-brand 相关的几行即可，无需逐页替换。
+ * 说明：定制 Element Plus 的 --el-color-mcs 是品牌橙（主操作按钮 type="mcs"），
+ * 这里的 --mcs-brand 是页面骨架用的强调蓝，两者职责不同，不要互相替代。
+ */
+
+:root {
+  /* 品牌强调色：页面骨架、卡片描边、图表、进度条使用 */
+  --mcs-brand: #1677ff;
+  --mcs-brand-rgb: 22, 119, 255;
+  --mcs-brand-hover: #4096ff;
+  --mcs-brand-light: #e8f3ff;
+  --mcs-brand-border: #91caff;
+
+  /* 语义色 */
+  --mcs-success: #16a34a;
+  --mcs-warning: #d97706;
+  --mcs-danger: #ef4444;
+  --mcs-info: #8a919f;
+  --mcs-teal: #0d9488;
+  --mcs-purple: #7b5cff;
+
+  /* 背景与描边 */
+  --mcs-page-bg: #f7f9fc;
+  --mcs-card-bg: #ffffff;
+  --mcs-fill-light: #f5f9ff;
+  --mcs-fill-lighter: #f8fafc;
+  --mcs-border-light: #e8eef8;
+  --mcs-border-lighter: #eef3fb;
+  --mcs-border-input: #dce6f5;
+
+  /* 渐变：标题栏、分区卡片 */
+  --mcs-gradient-bar: linear-gradient(90deg, #f7faff 0%, #ffffff 100%);
+  --mcs-gradient-card: linear-gradient(180deg, #f5f9ff 0%, #ffffff 72%);
+  --mcs-gradient-tabs: linear-gradient(180deg, #f5f9ff 0%, #ffffff 100%);
+
+  /* 文本 */
+  --mcs-text-title: #1f2329;
+  --mcs-text-regular: #3b4a63;
+  --mcs-text-secondary: #4e5969;
+  --mcs-text-placeholder: #8a919f;
+  --mcs-text-muted: #9ca3af;
+
+  /* 表格 */
+  --mcs-table-header-bg: #f0f5ff;
+  --mcs-table-header-color: #3b4a63;
+  --mcs-table-row-hover-bg: #f5f9ff;
+
+  /* 圆角 */
+  --mcs-radius-sm: 6px;
+  --mcs-radius-table: 8px;
+  --mcs-radius-md: 10px;
+  --mcs-radius-lg: 12px;
+  --mcs-radius-pill: 999px;
+
+  /* 间距 */
+  --mcs-gap-xs: 8px;
+  --mcs-gap-sm: 12px;
+  --mcs-gap-md: 16px;
+  --mcs-gap-lg: 24px;
+
+  /* 页面左右内边距：与 mcs-title 的 24px 对齐，保证标题、筛选、表格、分页同一条竖线 */
+  --mcs-page-pad-x: 24px;
+
+  /* 阴影 */
+  --mcs-shadow-card: 0 1px 2px rgba(var(--mcs-brand-rgb), 0.04);
+  --mcs-shadow-panel: 0 2px 10px rgba(17, 24, 39, 0.03);
+  --mcs-shadow-dialog: 0 8px 28px rgba(var(--mcs-brand-rgb), 0.12);
+
+  /* KPI 卡底色 */
+  --mcs-kpi-blue-bg: linear-gradient(180deg, #eef5ff 0%, #f7faff 100%);
+  --mcs-kpi-blue-border: #d6e4ff;
+  --mcs-kpi-green-bg: linear-gradient(180deg, #eefaf2 0%, #f7fcf8 100%);
+  --mcs-kpi-green-border: #d4efdf;
+  --mcs-kpi-orange-bg: linear-gradient(180deg, #fff6eb 0%, #fffaf4 100%);
+  --mcs-kpi-orange-border: #ffe2bd;
+  --mcs-kpi-purple-bg: linear-gradient(180deg, #f3efff 0%, #faf8ff 100%);
+  --mcs-kpi-purple-border: #ded3ff;
+  --mcs-kpi-teal-bg: linear-gradient(180deg, #eefaf8 0%, #f7fcfb 100%);
+  --mcs-kpi-teal-border: #cceee9;
+
+  /* 表格高度自适应下的最小可视高度 */
+  --mcs-table-min-height: 240px;
+}

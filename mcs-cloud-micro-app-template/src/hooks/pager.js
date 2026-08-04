@@ -19,9 +19,11 @@ export default function Pager( HTTP ) {
   function findPage() {
     loading.value=true
     HTTP.findPage(form).then(res => {
-      tableData.value = res.data.rows;
-      total.value = Number(res.data.total?res.data.total:0);
-    }).catch(err => {}).finally(()=>{loading.value=false})
+      // 分页字段兼容：不同网关返回 rows 或 records
+      const data = res.data ?? {};
+      tableData.value = data.rows ?? data.records ?? [];
+      total.value = Number(data.total?data.total:0);
+    }).catch(err => {tableData.value = [];total.value = 0;}).finally(()=>{loading.value=false})
   }
 
   // 页码改变回调

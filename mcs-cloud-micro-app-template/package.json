@@ -13,6 +13,7 @@
     "core-js": "^3.8.3",
     "element-plus": "http://192.168.0.144:3000/cloud/mcs-cloud-element-plus/archive/2.4.tar.gz",
     "js-base64": "^3.7.5",
+    "json-bigint": "^1.0.0",
     "path-browserify": "^1.0.1",
     "stream-browserify": "^3.0.0",
     "vue": "^3.2.13",

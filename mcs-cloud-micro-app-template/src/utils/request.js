@@ -1,12 +1,36 @@
 import axios from 'axios'
+import JSONBig from 'json-bigint'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import store from '@/store'
+
+// 后端 Long 主键（雪花 ID）超过 JS 安全整数范围，JSON.parse 会丢精度，统一按字符串反序列化
+const jsonBigParser = JSONBig({ storeAsString: true, strict: false })
+
+function transformJsonResponse(data) {
+    if (data == null || data === '' || typeof data !== 'string') {
+        return data
+    }
+    const text = data.trim()
+    if (text[0] !== '{' && text[0] !== '[') {
+        return data
+    }
+    try {
+        return jsonBigParser.parse(text)
+    } catch (e) {
+        try {
+            return JSON.parse(data)
+        } catch (e2) {
+            return data
+        }
+    }
+}
 
 // create an axios instance
 const service = axios.create({
     baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
     // withCredentia//ls: true, // send cookies when cross-domain requests
-    timeout: 120000 // request timeout
+    timeout: 120000, // request timeout
+    transformResponse: [transformJsonResponse]
 })
 
 // request interceptor

@@ -1,0 +1,92 @@
+/**
+ * Element Plus 组件库统一覆盖
+ *
+ * 这里承载「弹框 / 抽屉 / 表格空态」等跨页面一致的外观。
+ * mcs-dialog、mcs-drawer 组件会自动挂上对应 class，业务页面无需再写 <style lang="scss"> 全局覆盖块。
+ */
+
+/* ---------------- 弹框 ---------------- */
+
+.mcs-dialog.el-dialog {
+  border-radius: var(--mcs-radius-lg);
+  overflow: hidden;
+  box-shadow: var(--mcs-shadow-dialog);
+  padding: 0;
+}
+
+.mcs-dialog .el-dialog__header {
+  margin: 0;
+  padding: 18px var(--mcs-page-pad-x) var(--mcs-gap-md);
+  border-bottom: 1px solid var(--mcs-border-light);
+  background: var(--mcs-gradient-bar);
+}
+
+.mcs-dialog .el-dialog__title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--mcs-text-title);
+}
+
+.mcs-dialog .el-dialog__headerbtn {
+  top: 14px;
+  right: 10px;
+}
+
+.mcs-dialog .el-dialog__body {
+  padding: 20px var(--mcs-page-pad-x);
+  background: var(--mcs-page-bg);
+  max-height: 68vh;
+  overflow: auto;
+}
+
+.mcs-dialog .el-dialog__footer {
+  padding: 14px var(--mcs-page-pad-x) 18px;
+  border-top: 1px solid var(--mcs-border-light);
+  background: var(--mcs-card-bg);
+}
+
+/* ---------------- 抽屉 ---------------- */
+
+.mcs-drawer.el-drawer {
+  --el-drawer-padding-primary: 20px var(--mcs-page-pad-x);
+}
+
+.mcs-drawer .el-drawer__header {
+  margin-bottom: 0;
+  padding-bottom: var(--mcs-gap-md);
+  border-bottom: 1px solid var(--mcs-border-light);
+  background: var(--mcs-gradient-bar);
+}
+
+.mcs-drawer .el-drawer__title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--mcs-text-title);
+}
+
+.mcs-drawer .el-drawer__body {
+  padding-top: 20px;
+  overflow: auto;
+  background: var(--mcs-page-bg);
+}
+
+.mcs-drawer .el-drawer__footer {
+  padding: var(--mcs-gap-md) var(--mcs-page-pad-x);
+  border-top: 1px solid var(--mcs-border-light);
+  background: var(--mcs-card-bg);
+}
+
+/* ---------------- 表格空态 ---------------- */
+
+.el-table__empty-block {
+  min-height: 220px;
+  width: 100% !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.el-table__empty-text {
+  width: 100%;
+  line-height: normal;
+}

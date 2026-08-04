@@ -1,1 +1,8 @@
+/**
+ * 全局样式入口，引入顺序即样式优先级：
+ * variables（设计 token）-> common（通用 class）-> page-shell（页面骨架）-> element-overrides（组件库覆盖）
+ */
+@import './variables.scss';
 @import './common.scss';
+@import './page-shell.scss';
+@import './element-overrides.scss';

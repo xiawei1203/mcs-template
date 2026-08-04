@@ -1,95 +1,56 @@
 /**
- * 路由配置
+ * 本地调试菜单
+ *
+ * 仅在 development 且 settings.remotePermissions 为 false 时生效，
+ * 生产或远程权限模式下由主应用 / 运营平台下发菜单，本文件失效。
+ * 这里的 path 必须与各模块 routePaths.js 保持一致，方便切换到远程模式时无缝对齐。
  */
-
-
 
 module.exports=[
     {
         component: () => import('@/views/layout'),
-        "name": "home",
-        "path": "/home",
+        "name": "demo",
+        "path": "/demo",
         "hidden": false,
         "meta": {
             "icon": "dingbudaohangicon-xitongpeizhi",
             "noCache": false,
-            "title": "测试菜单A"
+            "title": "示例模块"
         },
         "children":[
             {
-              "name": "about1-1",
-              "path": "about1-1",
+              component: () => import('@/views/demo'),
+              "name": "demoList",
+              "path": "list",
               "hidden": false,
               "meta": {
                   "noCache": false,
-                  "title": "测试菜单A1-1"
-              },
-              "children":[
-                {
-                  component: () => import('@/views/sysIcons'),
-                  "name": "about1-2",
-                  "path": "about1-2",
-                  "hidden": false,
-                  "meta": {
-                      "noCache": false,
-                      "title": "测试菜单A1-2"
-                  },
-                },
-                {
-                  component: () => import('@/views/testt'),
-                  "name": "about1-3",
-                  "path": "about1-3",
-                  "hidden": false,
-                  "meta": {
-                      "noCache": false,
-                      "title": "测试菜单A1-3"
-                  },
-                }
-            ]
-            },
-            {
-              component: () => import('@/views/test'),
-              "name": "about2-2",
-              "path": "about2-2",
-              "hidden": false,
-              "meta": {
-                  "noCache": false,
-                  "title": "测试菜单A1-2"
+                  "title": "示例列表"
               },
             }
         ]
     },
     {
         component: () => import('@/views/layout'),
-        "name": "about-a",
-        "path": "/about-a",
+        "name": "system",
+        "path": "/system",
         "hidden": false,
         "meta": {
             "icon": "dingbudaohangicon-xitongpeizhi",
             "noCache": false,
-            "title": "测试菜单B"
+            "title": "系统工具"
         },
         "children":[
             {
-              component: () => import('@/views/test'),
-              "name": "about-01",
-              "path": "about-01",
+              component: () => import('@/views/sysIcons'),
+              "name": "sysIcons",
+              "path": "icons",
               "hidden": false,
               "meta": {
                   "noCache": false,
-                  "title": "测试菜单01"
+                  "title": "图标库"
               },
-            },
-            {
-                component: () => import('@/views/test'),
-                "name": "about-02",
-                "path": "about-02",
-                "hidden": false,
-                "meta": {
-                    "noCache": false,
-                    "title": "测试菜单02"
-                },
-              }
+            }
         ]
     }
 ]
