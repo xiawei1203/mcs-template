@@ -152,7 +152,7 @@ page-container mcs-page      // 页面容器，自动获得底色、整卡填满
 - 同时启动主应用与子应用：`npm run start`。
 - 生产构建：`npm run build`。
 - 代码检查：`npm run lint`（`plugin:vue/vue3-essential` + `eslint:recommended`，配置在 `package.json` 的 `eslintConfig`）。
-- `src/components/mcs-uploader`、`src/components/mcs-editor` 为早期移植代码，存在已知的历史遗留 lint 问题；判断标准是**新增与修改的文件不得引入新问题**，不要顺手大改这两个目录。
+- 当前 lint 存量 53 个问题，集中在早期移植的 `src/components/mcs-uploader`、`src/components/mcs-editor` 以及 `qiankun.js`、`utils/common.js`、`views/sysIcons`；判断标准是**新增与修改的文件不得引入新问题**，不要顺手大改这些目录。
 - 修改代码后至少运行与变更相关的检查命令；无法运行时必须说明原因与未覆盖风险。
 
 ## 新模块自检清单

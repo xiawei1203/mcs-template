@@ -367,7 +367,9 @@
     }
   }
 
+  /* 标题栏 #left 插槽里的副标题，需与主标题拉开间距 */
   .page-subtitle {
+    margin-left: var(--mcs-gap-sm);
     color: var(--mcs-text-placeholder);
     font-size: 13px;
     font-weight: 400;

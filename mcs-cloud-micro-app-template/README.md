@@ -32,6 +32,8 @@ npm run start  ##同时启动主应用、子应用；默认使用   127.0.0.1:99
 默认访问地址：127.0.0.1:9999
 ~~~
 
+模板默认 `src/settings.js` 的 `remotePermissions: true`，即菜单路由由运营平台下发，`src/router/constantRoutes.js` 的本地菜单不生效。想脱离主应用单独打开示例模块（`/demo/list`），先把 `remotePermissions` 改为 `false` 再 `npm run dev`。详情与表单等隐藏页在 `src/router/hiddenRoutes.js` 中，两种模式下都始终注册。
+
 ## 四、编译
 
 ```
@@ -166,4 +168,4 @@ npm run build
 
 ESLint 使用 `plugin:vue/vue3-essential` + `eslint:recommended`（配置在 `package.json` 的 `eslintConfig`）。
 
-`src/components/mcs-uploader`、`src/components/mcs-editor` 是早期从第三方上传库移植的代码，`npm run lint` 会报出一批历史遗留问题（未使用变量、Vue 2 生命周期与插槽写法）。这些是已知存量，新写的代码不允许再增加同类问题。
+当前 `npm run lint` 会报出 53 个历史遗留问题，集中在早期移植的 `src/components/mcs-uploader`（约 40 个）、`src/components/mcs-editor`、以及 `qiankun.js`、`utils/common.js`、`views/sysIcons`，主要是未使用变量与 Vue 2 时代的生命周期、插槽写法。这些是已知存量，判断标准是**新增与修改的文件不得引入新问题**，不要顺手大改这些目录。
