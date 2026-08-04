@@ -1,0 +1,109 @@
+---
+description: Java 后端（MyBatis-Plus）分层、雪花主键、领域模型、R 泛型与 Swagger 规范
+globs: "**/*.java"
+alwaysApply: false
+---
+
+# Java 后端代码生成规范
+
+## 分层与包结构
+
+生成或修改后端代码时采用 **MyBatis-Plus**，并保持以下层次（模块包名形如 `com.mcsgis.saas.module.demo`）：
+
+- `controller`：仅做参数接收与 `R` 包装，不写业务逻辑
+- `service` / `service.impl`：接口 + `ServiceImpl`，业务与事务
+- `domain`：与表对应的实体（`@TableName`）
+- `dao`：Mapper 接口，继承 `BaseMapper<实体>`
+- `dto` / `vo`：入参模型 / 出参模型
+- `constant`：状态值、类型值等常量
+- `support`：可复用的领域规则与计算逻辑
+
+可参考本仓库的 `com.mcsgis.saas.module.demo` 示例模块。
+
+## 领域实体（domain）必备字段
+
+新建或与表映射的实体类必须包含下列字段（Java 驼峰命名；库表列为下划线）。与业务字段并列声明即可：
+
+| 含义     | Java 字段       | 建议注解/说明 |
+|----------|-----------------|---------------|
+| 主键     | `Long id`       | **雪花 ID**：`@TableId(type = IdType.ASSIGN_ID)`；`@JsonSerialize(using = ToStringSerializer.class)`，`@ApiModelProperty` |
+| 创建时间 | `Date createTime` | `@TableField(value = "create_time", fill = FieldFill.INSERT)` |
+| 更新时间 | `Date updateTime` | `@TableField(value = "update_time", fill = FieldFill.INSERT_UPDATE)` |
+| 创建人   | `Long createId` | `@TableField(value = "create_id", fill = FieldFill.INSERT)`；`ToStringSerializer` |
+| 更新人   | `Long updateId` | `@TableField(value = "update_id", fill = FieldFill.INSERT_UPDATE)`；`ToStringSerializer` |
+| 用户池   | `Long userPoolId` | `ToStringSerializer`，`@ApiModelProperty("用户池id")` |
+
+表名使用 `@TableName`。主键必须由 **MyBatis-Plus 在插入时生成**，禁止依赖数据库自增（与 `ASSIGN_ID` 策略一致）。
+
+```java
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+
+@TableId(type = IdType.ASSIGN_ID)
+private Long id;
+```
+
+## Controller 返回类型
+
+- 统一使用 `com.mcsgis.saas.common.data.R`。
+- **禁止**裸写 `public R xxx()`；必须为 **`R<具体类型>`**，例如：
+  - 分页：`public R<PageResult<YourVo>> pageList(...)`
+  - 单条：`public R<YourEntity> detail(...)`
+  - 列表：`public R<List<YourVo>> list(...)`
+  - 无载荷成功：`public R<Void> add(...)` 且 `return R.success();`
+- 分页统一使用 `PageResult<T>`，不要把 MyBatis-Plus 的 `Page<T>` 直接暴露给调用方。
+
+## 事务与异常
+
+- 写操作、删除、跨表操作、状态流转、批量处理加 `@Transactional(rollbackFor = Exception.class)`。
+- 业务失败统一 `throw new McsException("中文提示")`，由 starter 的全局异常处理器转换为 `R`；
+  禁止在 Service 层 `return R.error()`，也不要抛 `RuntimeException`、`IllegalArgumentException` 替代。
+
+## 数据访问
+
+- 简单查询、分页、保存、更新优先用 MyBatis-Plus：`Wrappers.lambdaQuery()`、`getById`、`page`、`save`、`updateById`。
+- 查询条件使用 Lambda 字段引用（如 `Demo::getDemoName`），避免硬编码列名；字符串条件先 `StringUtils.isNotBlank` 并 `trim()`。
+- 多表联查、复杂统计、批量更新等写在 `resources/mapper/**/*.xml`，**不要**用 `@Select`/`@Update` 注解承载复杂 SQL。
+- 不在 Controller 中直接调用 Mapper。
+
+## Swagger（接口文档）
+
+本项目使用 **springfox**：`io.swagger.annotations`。
+
+- 类上：`@Api(tags = "模块中文名")`
+- 方法：`@ApiOperation("简短清晰的中文说明，含场景/约束更佳")`
+- 实体与 VO：`@ApiModelProperty(value = "说明", required = true/false)`；枚举、状态码在 `value` 中写清取值含义（如 `0-禁用 1-启用`）。
+
+## 反面示例（生成时不要这样）
+
+```java
+// ❌ 未指定泛型
+public R pageList(...) { return R.success(...); }
+
+// ❌ 领域类缺少审计字段
+public class Xxx { private String name; }
+
+// ❌ 主键用数据库自增或未声明 MP 策略
+private Long id; // 缺少 @TableId(type = IdType.ASSIGN_ID)
+
+// ❌ 用返回值表达业务失败
+if (row == null) { return R.error("数据不存在"); }
+```
+
+## 正面示例（生成时应接近）
+
+```java
+@GetMapping
+@ApiOperation("分页查询XXX")
+public R<PageResult<XxxListVo>> pageList(@RequestParam(defaultValue = "1") int page,
+                                        @RequestParam(defaultValue = "10") int pageSize,
+                                        @RequestParam(required = false) String keyword) {
+    return R.success(xxxService.pageList(page, pageSize, keyword));
+}
+```
+
+## 其他
+
+- 保持 Java 8 兼容，不使用更高版本语法。
+- 空行克制：不在 import、注解、字段、普通语句前后机械插入空行。
+- 注释解释规则、边界和原因，不写“给变量赋值”这类无信息注释。

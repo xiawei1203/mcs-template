@@ -1,0 +1,13 @@
+version: "3"
+services:
+  mcscloud-web-template:
+    build:
+      dockerfile: Dockerfile
+      context: ./
+    image: mcscloud/template
+    container_name: mcscloud-web-template
+    environment:
+      - API_URL=http://192.168.0.198:31010/
+      - STATIC_RES_URL=http://192.168.0.150:9000/model/
+    ports:
+      - 32000:80

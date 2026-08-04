@@ -1,0 +1,29 @@
+<!doctype html><html><head><meta charset="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"/><link rel="icon" href="/favicon.ico"/><script src="./EasyWasmPlayer.js"></script><title>智慧园区标准化项目系统</title><script>// 线上测试版
+      
+      window.MCSINFO={
+        client_id: '55e39756d42b41fa9b271815aefba22d', 
+        issuer: 'http://192.168.0.198:9002'
+      }
+
+      function GetQueryString(name) {
+          var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+          var r = window.location.search.substr(1).match(reg);
+          var context = "";
+          if (r != null)
+              context = decodeURIComponent(r[2]);
+          reg = null;
+          r = null;
+          return context == null || context == "" || context == "undefined" ? "" : context;
+      }
+      const client_id= GetQueryString("client_id")
+      const issuer= GetQueryString("issuer")
+      if (client_id && issuer) {
+          window.MCSINFO.client_id=client_id
+          window.MCSINFO.issuer=issuer
+          window.MCSINFO.logout_redirect_uri=`${location.origin}?client_id=${client_id}&issuer=${issuer}`
+          window.localStorage.setItem("MCSCLOUD_MCSINFO",JSON.stringify(window.MCSINFO))
+      }</script>
+      <script>
+      window._AMapSecurityConfig = {
+          securityJsCode: '62ef75eead8f836df27573d1223443ea',
+      }</script><script src="https://webapi.amap.com/maps?v=1.4.15&key=eb1d1e10327cabd113ff01794c6394db"></script><script defer="defer" type="module" src="/static/js/runtime.518d9cf7.js"></script><script defer="defer" type="module" src="/static/js/chunk-element-plus.9264ddfe.js"></script><script defer="defer" type="module" src="/static/js/chunk-libs.f006cd73.js"></script><script defer="defer" type="module" src="/static/js/app.5e0fea3d.js"></script><link href="/static/css/chunk-element-plus.87a13a7c.css" rel="stylesheet"><link href="/static/css/app.81a178a4.css" rel="stylesheet"><script defer="defer" src="/static/js/runtime-legacy.9ec03ab0.js" nomodule></script><script defer="defer" src="/static/js/chunk-element-plus-legacy.636e900f.js" nomodule></script><script defer="defer" src="/static/js/chunk-libs-legacy.bc8ba4b9.js" nomodule></script><script defer="defer" src="/static/js/app-legacy.a5825592.js" nomodule></script></head><body><noscript><strong>We're sorry but 智慧园区标准化项目系统 doesn't work properly without JavaScript enabled. Please enable it to continue.</strong></noscript><div id="app"></div></body></html>

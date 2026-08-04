@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mcsgis.saas.module.demo.dao.DemoMapper">
+
+    <!-- 复杂 SQL 放 XML，不用 @Select 注解；namespace 必须与 Mapper 接口全限定名一致 -->
+    <select id="selectMaxDemoCodeSeq" resultType="int">
+        SELECT IFNULL(MAX(CAST(SUBSTRING(demo_code, 5) AS UNSIGNED)), 0)
+        FROM template_demo
+        WHERE demo_code REGEXP '^DEMO[0-9]+$'
+    </select>
+
+</mapper>

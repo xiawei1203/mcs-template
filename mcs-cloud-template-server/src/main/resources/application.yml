@@ -1,0 +1,102 @@
+server:
+  port: 30060
+
+spring:
+  application:
+    name: template
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+  main:
+    allow-bean-definition-overriding: true
+  cloud:
+    nacos:
+      discovery:
+        server-addr: ${NACOS_DISCOVERY_SERVER_ADDR:192.168.0.102:8850}
+        ip: ${NACOS_DISCOVERY_IP:192.168.0.88}
+        namespace: e4c323fc-4f4d-4c69-969a-ec63437ab99d
+        group: ibms
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    dynamic:
+      primary: master # 配置默认数据库,及没有注解指定时走的数据库
+      #严格匹配数据源,默认false. true未匹配到指定数据源时抛异常,false使用默认数据源
+      strict: false
+      datasource:
+        master:
+          driver-class-name: com.mysql.cj.jdbc.Driver
+          url: jdbc:mysql://192.168.0.102:3306/mcscloud_ibms?useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false&allowPublicKeyRetrieval=true
+          username: root
+          password: root
+        # 时序库（TDengine）按需启用；启用后 Service 上加 @DS("slave")
+        #slave:
+        #  driver-class-name: com.taosdata.jdbc.rs.RestfulDriver
+        #  url: jdbc:TAOS-RS://192.168.0.150:6041/mcsgiscloud?timezone=Asia/Shanghai&charset=UTF-8
+        #  username: root
+        #  password: taosdata
+      druid:
+        initial-size: 5 #初始建立连接数量
+        min-idle: 5 #最小连接数量
+        max-active: 20 #最大连接数量
+        max-wait: 10000 #获取连接最大等待时间，毫秒
+        test-on-borrow: true #申请连接时检测连接是否有效
+        test-on-return: true #归还连接时检测连接是否有效
+        time-between-eviction-runs-millis: 60000 #配置间隔检测连接是否有效的时间（单位是毫秒）
+        min-evictable-idle-time-millis: 300000 #连接在连接池的最小生存时间（毫秒）
+        test-while-idle: true
+        validation-query: SELECT 1
+  redis:
+    host: 192.168.0.150
+    database: 4
+    port: 6379
+
+mybatis-plus:
+  # 用 ** 以支持按模块划分子目录存放 XML，如 mapper/demo/DemoMapper.xml
+  mapper-locations: classpath*:/mapper/**/*.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    banner: false
+    db-config:
+      # 雪花主键由 MyBatis-Plus 在插入时生成，不依赖库表自增
+      id-type: assign_id
+
+mcs:
+  doc:
+    api-base-package: com.mcsgis.saas
+  security:
+    enable: true
+    jwk-set-uri: http://192.168.0.102:9002/oauth2/jwks
+    ignore-urls:
+      - /**/v1/config/**
+      - /**/v1/login/**
+  web:
+    user-pool:
+      ignore-urls:
+        - /**/v1/config/**
+        - /**/v1/login/**
+        - /**/v1/userPool/*
+        - /**/oss/**
+
+logging:
+  level:
+    com.alibaba.nacos: error
+    com.mcsgis: info
+  file:
+    path: /usr/local/mcs/logs/${spring.application.name}
+    name: ${logging.file.path}/${spring.application.name}.log
+  pattern:
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  logback:
+    rollingpolicy:
+      file-name-pattern: ${logging.file.path}/%d{yyyyMMdd}/${spring.application.name}_%d{yyyy-MM-dd}.%i.log.gz
+      total-size-cap: 500MB
+      max-history: 30
+      max-file-size: 10MB

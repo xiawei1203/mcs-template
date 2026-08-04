@@ -1,0 +1,124 @@
+####################################
+# Maven / 构建产物
+####################################
+target/
+build/
+out/
+dependency-reduced-pom.xml
+release.properties
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+pom.xml.tag
+buildNumber.properties
+.mvn/timing.properties
+.flattened-pom.xml
+
+####################################
+# Java 编译与崩溃日志
+####################################
+*.class
+*.ctxt
+.mtj.tmp/
+hs_err_pid*
+replay_pid*
+*.hprof
+
+####################################
+# 打包文件
+####################################
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar
+*.tar.gz
+*.rar
+*.7z
+# Maven Wrapper 需要随工程提交
+!.mvn/wrapper/maven-wrapper.jar
+
+####################################
+# IDE - IntelliJ IDEA
+####################################
+.idea/
+*.iml
+*.ipr
+*.iws
+.idea_modules/
+atlassian-ide-plugin.xml
+
+####################################
+# IDE - Eclipse / STS
+####################################
+.classpath
+.project
+.settings/
+.metadata/
+bin/
+.factorypath
+.apt_generated/
+.springBeans
+.sts4-cache/
+
+####################################
+# IDE - VS Code / NetBeans
+####################################
+.vscode/
+!.vscode/settings.json
+!.vscode/extensions.json
+nbproject/private/
+nbbuild/
+nbdist/
+.nb-gradle/
+
+####################################
+# 日志与运行时文件
+####################################
+logs/
+log/
+*.log
+*.log.*
+*.pid
+*.seed
+*.pid.lock
+
+####################################
+# 本地配置（避免泄露账号密码）
+####################################
+application-local.yml
+application-local.yaml
+application-local.properties
+application-dev-local.*
+*.local.yml
+*.local.yaml
+*.local.properties
+.env
+.env.local
+
+####################################
+# 临时文件 / 上传目录
+####################################
+temp/
+tmp/
+upload/
+uploads/
+*.tmp
+*.bak
+*.swp
+*.swo
+*~
+
+####################################
+# 操作系统
+####################################
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
