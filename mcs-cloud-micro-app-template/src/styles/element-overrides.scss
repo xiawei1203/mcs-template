@@ -11,11 +11,10 @@
   border-radius: var(--mcs-radius-lg);
   overflow: hidden;
   box-shadow: var(--mcs-shadow-dialog);
-  padding: 0;
 }
 
 .mcs-dialog .el-dialog__header {
-  margin: 0;
+  margin-bottom: 0;
   padding: 18px var(--mcs-page-pad-x) var(--mcs-gap-md);
   border-bottom: 1px solid var(--mcs-border-light);
   background: var(--mcs-gradient-bar);
@@ -25,11 +24,6 @@
   font-size: 16px;
   font-weight: 600;
   color: var(--mcs-text-title);
-}
-
-.mcs-dialog .el-dialog__headerbtn {
-  top: 14px;
-  right: 10px;
 }
 
 .mcs-dialog .el-dialog__body {

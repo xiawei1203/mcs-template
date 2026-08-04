@@ -389,7 +389,8 @@
     color: var(--mcs-text-regular);
     font-weight: 500;
   }
-  .el-form-item:last-child{
+  /* 仅收掉表单最后一项的下间距；el-row/el-col 内的表单项不参与，避免行间距被吃掉 */
+  .el-form > .el-form-item:last-child{
     margin-bottom: 0;
   }
 }

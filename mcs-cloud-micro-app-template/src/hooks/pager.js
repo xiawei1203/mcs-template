@@ -174,7 +174,7 @@ export default function Pager( HTTP ) {
       cancelButtonText: '取消',
       type: 'warning'
     }).then(() => {
-      HTTP.deleteBatch(selectIds).then(res => {
+      HTTP.deleteBatch(selectIds.value).then(res => {
         ElMessage.success("删除成功");
         findPage();
       }).catch(err => { })

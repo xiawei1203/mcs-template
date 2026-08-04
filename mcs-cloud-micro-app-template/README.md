@@ -1,4 +1,8 @@
-# 系统管理页面
+# 微前端子应用模板
+
+MCS 智慧建筑 qiankun 子应用脚手架。内置统一的设计 token、页面骨架样式、公共组件、列表分页 Hook 与一套完整的示例模块，用于快速派生新的业务子应用。
+
+编码规范见 [agent.md](./agent.md)，AI 辅助编码规则见 `.cursor/rules/`。
 
 ## 一、安装依赖
 
@@ -95,3 +99,71 @@ services:
 ### 5.2 直接部署
 
 将发布后的文件，直接复制到服务器中
+
+## 六、基于模板创建子应用
+
+复制本工程后按顺序改这几处，`settings.js` 的 `name` 决定构建目录、qiankun 注册名与路由 base，必须先改。
+
+| 步骤 | 文件 | 修改内容 |
+| --- | --- | --- |
+| 1 | `src/settings.js` | `name` 改成子应用名（如 `leasing`）；`micro.entry` 改成本机开发地址；`remotePermissions` 决定用运营平台菜单还是本地调试菜单 |
+| 2 | `package.json` | `name` 与子应用名一致 |
+| 3 | `vue.config.js` | `devServer.port` 换一个未被占用的端口；`devServer.proxy` 增加本业务的网关前缀 |
+| 4 | `Dockerfile` | `COPY ./template-build/` 中的目录名改成 `<name>-build` |
+| 5 | `docker-compose.yml` | 服务名、镜像名、容器名、宿主端口都要唯一 |
+| 6 | `src/router/constantRoutes.js` | 本地调试菜单换成本业务模块 |
+| 7 | `src/router/hiddenRoutes.js` | 登记本业务的详情、表单等隐藏页 |
+| 8 | `src/views/demo/` | 整目录复制改名成业务模块，改完删除 demo，并从上面两个路由文件里移除 demo 引用 |
+
+## 七、工程结构
+
+```
+src/
+  api/common/        跨模块通用接口（组织树、用户列表）
+  components/        全局注册的公共组件
+  hooks/             pager（列表分页）、detailer（详情）、useAutoTableHeight（表格高度自适应）
+  router/            路由实例、本地调试菜单、隐藏页
+  store/             Vuex 与主应用下发的全局状态
+  styles/            variables（设计 token）、common（通用 class）、page-shell（页面骨架）、element-overrides（组件库覆盖）
+  utils/             request（含 json-bigint 大整数解析）、校验、格式化
+  views/demo/        示例模块：列表 + 弹框表单 + 抽屉表单 + 抽屉详情 + 路由化详情/表单
+```
+
+### 样式分层
+
+改样式前先确认应该改哪一层，避免各页面视觉不一致：
+
+1. Element Plus 组件能力与主题 CSS 变量；
+2. `src/styles/variables.scss` 的 `--mcs-*` 设计 token（换主色、圆角、间距只改这里）；
+3. `src/styles` 的通用 class、页面骨架与组件库覆盖；
+4. SFC `scoped`，仅业务渲染细节。
+
+禁止在页面里硬编码色值，或用 `:deep()` 重写页面底色、标题栏、表头、弹框与抽屉皮肤。
+
+### 公共组件
+
+`mcs-title`、`mcs-search`、`mcs-table-empty`、`mcs-dialog`、`mcs-drawer`、`mcs-section-card`、`mcs-status-tag`、`mcs-stats-grid`、`mcs-kpi-card`、`mcs-tag-select`、`mcs-uploader`、`mcs-editor` 已全局注册，模板中直接使用。参数说明见 [agent.md](./agent.md) 的「公共组件速查」。
+
+### 标准列表页
+
+```
+page-container mcs-page
+  mcs-title            标题栏，主操作放 #right
+  mcs-search           快捷搜索 + 高级搜索（#advanceSearch）+ 功能按钮（#functionButton）
+  page-body
+    panel
+      mcs-stats-grid   KPI 区（可选）
+      table-box        表格区，配合 useAutoTableHeight 自适应高度
+      pagination-box   分页区
+```
+
+## 八、代码检查
+
+```shell
+npm run lint
+npm run build
+```
+
+ESLint 使用 `plugin:vue/vue3-essential` + `eslint:recommended`（配置在 `package.json` 的 `eslintConfig`）。
+
+`src/components/mcs-uploader`、`src/components/mcs-editor` 是早期从第三方上传库移植的代码，`npm run lint` 会报出一批历史遗留问题（未使用变量、Vue 2 生命周期与插槽写法）。这些是已知存量，新写的代码不允许再增加同类问题。

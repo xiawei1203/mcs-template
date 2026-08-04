@@ -1,0 +1,68 @@
+---
+description: 微前端业务子应用的 Vue Router 与页面跳转规范；列表、表单、详情 CRUD 及运营平台动态菜单场景适用。
+globs: src/views/**/*.vue,src/router/**/*.js,src/qiankun.js
+alwaysApply: false
+---
+
+# 业务子应用 · 前端路由与页面跳转规范
+
+适用于通过 qiankun 嵌入主应用的业务子应用：路由由主应用 / 运营平台在运行时下发，本地 `constantRoutes` 仅作调试。不同子应用在应用名称、接口前缀、views 目录上不同，但下列跳转方式与参数约定统一。
+
+## 1. 跳转优先 `path`，不写死 `name`
+
+- 动态下发路由的 `name` 与运营平台配置强相关，硬编码 `router.push({ name })` 容易 No match。
+- 一律使用 `path` + `query`：`router.push({ path: SOME_PATH })`、`router.push({ path: SOME_PATH, query: { id: row.id } })`。
+
+## 2. 每个业务模块维护 `routePaths.js`
+
+在 `src/views/<module>/routePaths.js` 集中导出 path 常量，与运营平台菜单 path 字符串一致（不含子应用 history base）：
+
+```js
+export const FEATURE_LIST = '/模块前缀/list'
+export const FEATURE_DETAIL = '/模块前缀/detail' // query { id }
+export const FEATURE_FORM = '/模块前缀/form'     // query { id } 有值为编辑
+```
+
+页面内只 import 常量，禁止复制粘贴 path 字符串，也不要自行拼接子应用前缀。
+
+## 3. 列表页跳转约定
+
+- 查看详情：`{ path: FEATURE_DETAIL, query: { id } }`
+- 编辑：`{ path: FEATURE_FORM, query: { id } }`
+- 新增：`{ path: FEATURE_FORM }`，不带 id
+
+## 4. 表单页（新增编辑合一）
+
+- 编辑态：`const isEdit = computed(() => !!route.query.id)`
+- 编辑进入时才拉详情：`findById(route.query.id)`
+- 取消与保存成功回列表：`router.push({ path: FEATURE_LIST })`
+
+## 5. 详情页
+
+- 进入时校验主键：无 `route.query.id` 时提示并回列表，避免空白页。
+- 去编辑：`{ path: FEATURE_FORM, query: { id: route.query.id } }`
+- 返回列表用 `routePaths.js` 常量，不要 `router.go(-1)`（微前端嵌套下行为不一致）。
+
+## 6. 隐藏页必须本地注册
+
+远程权限模式下列表页由主应用菜单下发，详情与表单不配菜单，必须写入 `src/router/hiddenRoutes.js` 由子应用始终注册，否则刷新即 404。
+
+## 7. 主应用下发路由与组件映射
+
+运营平台配置的 `component` 为 `src/views` 下的路径（不含 `.vue`），如 `demo/index`。新建菜单时与子应用目录结构对齐。
+
+## 8. 列表分页接口
+
+后端分页字段可能是 `rows` 或 `records`，`src/hooks/pager.js` 已统一兼容；自行实现分页时同样要兼容，并在请求失败时把列表与 total 兜底为空，避免 loading 悬挂。
+
+## 9. 接口前缀
+
+不同子应用 API 前缀不同，以当前仓库 `vue.config.js` 的代理与网关配置为准；新建模块复制同目录 API 文件风格，不混用其他子应用前缀。
+
+## 10. 新模块自检
+
+- [ ] `src/views/<module>/routePaths.js`，path 与运营平台一致
+- [ ] 列表、表单、详情跳转使用 `path` + `query`
+- [ ] 详情与表单已登记 `hiddenRoutes.js`
+- [ ] 主键来源统一为 `route.query.id`
+- [ ] 分页字段兼容、请求失败兜底
