@@ -70,7 +70,12 @@
   </div>
 </template>
 
+<script>
+export default { name: 'McsSpaceTreePicker' }
+</script>
+
 <script setup>
+/* global defineProps, defineEmits */
 import { computed, nextTick, reactive, ref, watch } from 'vue'
 import { ElMessage } from 'element-plus'
 import { CircleCheckFilled } from '@element-plus/icons-vue'
@@ -347,7 +352,8 @@ function normalizeIds(list) {
 function countNodes(nodes, pred) {
   let n = 0
   const walk = (list) => {
-    ;(list || []).forEach((node) => {
+    const items = list || []
+    items.forEach((node) => {
       if (pred(node)) n += 1
       walk(node.children)
     })

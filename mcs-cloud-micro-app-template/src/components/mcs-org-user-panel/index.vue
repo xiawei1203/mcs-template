@@ -94,7 +94,12 @@
   </div>
 </template>
 
+<script>
+export default { name: 'McsOrgUserPanel' }
+</script>
+
 <script setup>
+/* global defineProps, defineEmits, defineExpose */
 import { computed, watch } from 'vue'
 import { Search } from '@element-plus/icons-vue'
 import { useOrgUsers } from '@/hooks/useOrgUsers'

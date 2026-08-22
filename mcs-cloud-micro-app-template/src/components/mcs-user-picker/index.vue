@@ -77,7 +77,12 @@
   </el-popover>
 </template>
 
+<script>
+export default { name: 'McsUserPicker' }
+</script>
+
 <script setup>
+/* global defineProps, defineEmits */
 import { computed, ref, watch } from 'vue'
 import { ArrowDown, CircleClose } from '@element-plus/icons-vue'
 import { useOrgUsers } from '@/hooks/useOrgUsers'
