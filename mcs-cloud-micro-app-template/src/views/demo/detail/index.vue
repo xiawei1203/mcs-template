@@ -5,7 +5,6 @@
         <span class="page-subtitle">{{ detail.code || '' }}</span>
       </template>
       <template #right>
-        <el-button plain @click="goList">返回列表</el-button>
         <el-button type="mcs" :disabled="!detail.id" @click="goEdit">编辑</el-button>
       </template>
     </mcs-title>

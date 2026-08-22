@@ -1,10 +1,6 @@
 <template>
   <div class="page-container mcs-page">
-    <mcs-title :title="isEdit ? '编辑示例' : '新增示例'" :border="true">
-      <template #right>
-        <el-button plain @click="goList">返回列表</el-button>
-      </template>
-    </mcs-title>
+    <mcs-title :title="isEdit ? '编辑示例' : '新增示例'" :border="true" />
     <div v-loading="loading" class="page-body page-body--scroll">
       <mcs-section-card title="基本信息">
         <el-form ref="formRef" :model="form" :rules="rules" label-position="top">
