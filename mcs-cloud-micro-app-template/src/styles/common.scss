@@ -333,3 +333,164 @@
     }
   }
 }
+
+/* ================= 通用 class（弹框/抽屉内容、分区卡、状态、单元格） ================= */
+
+/* 弹框、抽屉正文：多个分区卡之间统一间距 */
+.dialog-body,
+.drawer-body{
+  display: flex;
+  flex-direction: column;
+  gap: var(--mcs-gap-md);
+  padding-bottom: var(--mcs-gap-xs);
+}
+
+/* 分区卡：弹框、抽屉、详情页里的「基本信息 / 费用信息」等分组 */
+.section-card{
+  border-radius: var(--mcs-radius-md);
+  border: 1px solid var(--mcs-border-light);
+  background: var(--mcs-gradient-card);
+  padding: var(--mcs-gap-md) 18px;
+  box-shadow: var(--mcs-shadow-card);
+  box-sizing: border-box;
+}
+
+.section-card__title{
+  display: flex;
+  align-items: center;
+  gap: var(--mcs-gap-xs);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--mcs-text-title);
+  margin-bottom: 14px;
+}
+
+.section-card__extra{
+  margin-left: auto;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--mcs-text-placeholder);
+}
+
+.section-dot{
+  width: 4px;
+  height: 14px;
+  border-radius: 2px;
+  background: var(--mcs-brand);
+  flex-shrink: 0;
+}
+
+/* 分区卡内的表单：标签颜色与项间距统一，避免各页重复覆盖 */
+.section-card{
+  .el-form-item{
+    margin-bottom: 14px;
+  }
+  .el-form-item__label{
+    color: var(--mcs-text-regular);
+    font-weight: 500;
+  }
+  /* 仅收掉表单最后一项的下间距；el-row/el-col 内的表单项不参与，避免行间距被吃掉 */
+  .el-form > .el-form-item:last-child{
+    margin-bottom: 0;
+  }
+}
+
+/* 状态文本：前置圆点，色值按语义 class 切换 */
+.status-dot{
+  position: relative;
+  padding-left: 12px;
+  color: var(--mcs-text-secondary);
+  font-size: 13px;
+  white-space: nowrap;
+  &::before{
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    transform: translateY(-50%);
+    background: var(--mcs-info);
+  }
+}
+
+.status-dot.is-primary{
+  color: var(--mcs-brand);
+  &::before{ background: var(--mcs-brand); }
+}
+
+.status-dot.is-success{
+  color: var(--mcs-success);
+  &::before{ background: var(--mcs-success); }
+}
+
+.status-dot.is-warning{
+  color: var(--mcs-warning);
+  &::before{ background: var(--mcs-warning); }
+}
+
+.status-dot.is-danger{
+  color: var(--mcs-danger);
+  &::before{ background: var(--mcs-danger); }
+}
+
+/* 表格内进度条单元格 */
+.progress-cell{
+  display: flex;
+  align-items: center;
+  gap: var(--mcs-gap-xs);
+  padding: 0 4px;
+  .el-progress{
+    flex: 1;
+  }
+}
+
+.progress-cell__text{
+  flex-shrink: 0;
+  min-width: 64px;
+  color: var(--mcs-text-secondary);
+  font-size: 12px;
+  text-align: right;
+}
+
+/* 次要单元格文本（空值、备注） */
+.cell-muted{
+  color: var(--mcs-text-muted);
+}
+
+/* 标签式选择项：mcs-tag-select 使用 */
+.mcs-tag-group{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.mcs-tag{
+  border: 1px solid var(--mcs-border-input);
+  background: var(--mcs-card-bg);
+  color: var(--el-text-color-regular);
+  border-radius: var(--mcs-radius-sm);
+  padding: 6px 14px;
+  font-size: 13px;
+  line-height: 20px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  &:hover{
+    border-color: var(--mcs-brand-border);
+    color: var(--mcs-brand);
+  }
+  &.is-active{
+    border-color: var(--mcs-brand);
+    color: var(--mcs-brand);
+    background: var(--mcs-brand-light);
+  }
+  &.is-disabled{
+    cursor: not-allowed;
+    opacity: 0.6;
+    &:hover{
+      border-color: var(--mcs-border-input);
+      color: var(--el-text-color-regular);
+    }
+  }
+}

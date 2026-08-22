@@ -103,6 +103,8 @@ function handleCommand(command){
 
 .mcs-search{
   width: 100%;
+  /* 左右内边距必须算进宽度，否则 width:100% 会撑破父容器 */
+  box-sizing: border-box;
   padding: 20px 20px 0;
   .table-height{
     display: flex;

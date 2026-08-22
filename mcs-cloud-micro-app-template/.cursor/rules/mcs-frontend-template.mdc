@@ -1,0 +1,66 @@
+---
+description: 微前端子应用模板的样式分层、公共组件与目录规范；新增或修改 Vue 页面、组件、样式、API 时适用。
+globs: src/**/*.vue,src/**/*.js,src/**/*.scss
+alwaysApply: false
+---
+
+# 子应用模板 · 前端工程规范
+
+完整规范见仓库根目录 `agent.md`。以下是编码时必须遵守的硬性约束。
+
+## 样式：四层优先级，只在最低必要层改
+
+1. Element Plus 组件能力与主题 CSS 变量；
+2. `src/styles/variables.scss` 设计 token（`--mcs-*`）；
+3. `src/styles/common.scss`（通用 class）、`page-shell.scss`（页面骨架）、`element-overrides.scss`（组件库覆盖）；
+4. SFC `scoped`，仅业务渲染细节。
+
+**禁止**：
+
+- 在 SFC 里硬编码颜色、渐变、圆角、阴影 —— 一律 `var(--mcs-*)`。
+- 用 `scoped` + `:deep()` 重写页面底色、`mcs-title` 渐变、表头配色、`table-box` / `pagination-box` 内边距。
+- 在业务页面写非 scoped 的 `<style>` 全局块覆盖 `el-dialog` / `el-drawer` 结构 —— 用 `mcs-dialog` / `mcs-drawer`。
+- 同一段样式在两个以上 SFC 复制 —— 提取到 `src/styles`。
+
+## 页面结构
+
+列表页固定组合，class 已在 `page-shell.scss` 定义，不要在页面重复实现：
+
+```
+page-container mcs-page
+  mcs-title            主操作放 #right
+  mcs-search           筛选放 #advanceSearch，批量操作放 #functionButton
+  page-body
+    panel
+      mcs-stats-grid   KPI（可选）
+      table-box        表格 + mcs-table-empty + useAutoTableHeight
+      pagination-box   total > 0 时显示
+```
+
+详情、表单页用 `page-body page-body--scroll` 包 `mcs-section-card`，底部操作条用 `page-footer`。
+
+## 公共组件优先
+
+`mcs-title`、`mcs-search`、`mcs-table-empty`、`mcs-dialog`、`mcs-drawer`、`mcs-section-card`、`mcs-status-tag`、`mcs-stats-grid`、`mcs-kpi-card`、`mcs-tag-select`、`mcs-uploader`、`mcs-editor` 均已全局注册，直接用，不要自建同类结构。新增全局组件在 `src/components/index.js` 注册，且注册必须在 `app.mount()` 之前。
+
+## 目录与模块
+
+```
+src/views/<module>/
+  routePaths.js  constants.js  api/<module>.js
+  index.vue  components/*.vue  detail/index.vue  form/index.vue
+```
+
+`src/views/demo/` 是参考实现，新模块整目录复制改名。
+
+## 请求
+
+- 只通过 `src/utils/request.js` 发起请求；API 文件只导出语义化函数。
+- 响应已接入 json-bigint，Long 主键是字符串，不要 `Number()` 转换。
+- 查询参数归一化（日期区间拆分、空值剔除）放 API 层。
+- 分页字段兼容 `rows` / `records`（`pager.js` 已处理）。
+- 错误提示复用拦截器，`catch` 里只做本地兜底。
+
+## 排版
+
+禁止逐行空行。空行只用于分隔 `template`/`script`/`style` 区块、import 与业务代码、相邻函数、SCSS 顶层选择器。文件末尾单个换行。
