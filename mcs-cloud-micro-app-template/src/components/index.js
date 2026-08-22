@@ -10,6 +10,9 @@ import McsStatusTag from "./mcs-status-tag/index.vue";
 import McsStatsGrid from "./mcs-stats-grid/index.vue";
 import McsKpiCard from "./mcs-kpi-card/index.vue";
 import McsTagSelect from "./mcs-tag-select/index.vue";
+import McsUserPicker from "./mcs-user-picker/index.vue";
+import McsOrgUserPanel from "./mcs-org-user-panel/index.vue";
+import McsSpaceTreePicker from "./mcs-space-tree-picker/index.vue";
 
 /**
  * 注册全局公共组件，必须在 app.mount() 之前调用
@@ -28,4 +31,7 @@ export function installGlobalComponent(app){
     app.component("McsStatsGrid",McsStatsGrid)
     app.component("McsKpiCard",McsKpiCard)
     app.component("McsTagSelect",McsTagSelect)
+    app.component("McsUserPicker",McsUserPicker)
+    app.component("McsOrgUserPanel",McsOrgUserPanel)
+    app.component("McsSpaceTreePicker",McsSpaceTreePicker)
 }

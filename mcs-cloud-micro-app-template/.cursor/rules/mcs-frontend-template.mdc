@@ -41,7 +41,14 @@ page-container mcs-page
 
 ## 公共组件优先
 
-`mcs-title`、`mcs-search`、`mcs-table-empty`、`mcs-dialog`、`mcs-drawer`、`mcs-section-card`、`mcs-status-tag`、`mcs-stats-grid`、`mcs-kpi-card`、`mcs-tag-select`、`mcs-uploader`、`mcs-editor` 均已全局注册，直接用，不要自建同类结构。新增全局组件在 `src/components/index.js` 注册，且注册必须在 `app.mount()` 之前。
+`mcs-title`、`mcs-search`、`mcs-table-empty`、`mcs-dialog`、`mcs-drawer`、`mcs-section-card`、`mcs-status-tag`、`mcs-stats-grid`、`mcs-kpi-card`、`mcs-tag-select`、`mcs-uploader`、`mcs-editor`、`mcs-user-picker`、`mcs-org-user-panel`、`mcs-space-tree-picker` 均已全局注册，直接用，不要自建同类结构。新增全局组件在 `src/components/index.js` 注册，且注册必须在 `app.mount()` 之前。
+
+- 组织 / 用户 / 字典 / 空间走 `src/api/common`，不要在业务模块再包一层同名请求。
+- 系统字典用 `useDict`，不要各页直接打 `getDictData`。
+- 选负责人用 `mcs-user-picker`；弹框内单选/多选人用 `mcs-org-user-panel`。
+- 选空间用 `mcs-space-tree-picker`，锁定提示走 `disabledReason`，不要写死业务文案。
+- 查询空值用 `cleanQuery`，主键用 `toId`，附件下载用 `downloadAttachment`。
+- 只读信息栅格用 `.mcs-info-grid`。
 
 ## 目录与模块
 

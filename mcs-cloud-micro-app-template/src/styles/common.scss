@@ -459,6 +459,56 @@
   color: var(--mcs-text-muted);
 }
 
+/* 只读信息栅格：详情弹框 / 空间节点详情等，标签与取值上下排布，避免 el-descriptions 列宽不齐 */
+.mcs-info-grid{
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--mcs-gap-sm);
+}
+
+.mcs-info-grid__item,
+.mcs-info-grid__block{
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  padding: 10px 12px;
+  border: 1px solid var(--mcs-border-lighter);
+  border-radius: var(--mcs-radius-sm);
+  background: var(--mcs-fill-lighter);
+  box-sizing: border-box;
+}
+
+.mcs-info-grid__item--span2{
+  grid-column: span 2;
+}
+
+.mcs-info-grid__block{
+  grid-column: 1 / -1;
+}
+
+.mcs-info-grid__label{
+  font-size: 12px;
+  color: var(--mcs-text-placeholder);
+  line-height: 18px;
+}
+
+.mcs-info-grid__value{
+  font-size: 14px;
+  color: var(--mcs-text-title);
+  line-height: 22px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mcs-info-grid__value--wrap{
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow: visible;
+  text-overflow: unset;
+}
+
 /* 标签式选择项：mcs-tag-select 使用 */
 .mcs-tag-group{
   display: flex;
