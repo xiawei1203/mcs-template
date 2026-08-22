@@ -26,7 +26,7 @@
 - `src/router`：路由实例、本地调试菜单 `constantRoutes.js`、隐藏页 `hiddenRoutes.js`。
 - `src/store`：Vuex store 与主应用下发的全局状态。
 - `src/styles`：设计 token、公共 class、页面骨架、Element Plus 覆盖。
-- `src/utils`：请求实例、校验、格式化等基础能力。
+- `src/utils`：请求实例、附件下载、查询小工具、校验、格式化等基础能力。
 - `src/views`：页面级组件，按业务模块划分目录。
 
 ### 业务模块目录约定
