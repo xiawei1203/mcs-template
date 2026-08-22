@@ -1,0 +1,16 @@
+:root {
+  --mcs-brand: var(--el-color-mcs, #1a73e8);
+  --mcs-brand-light: var(--el-color-mcs-light-9, #e8f1fc);
+  --mcs-text-title: var(--el-text-color-primary, #303133);
+  --mcs-text-regular: var(--el-text-color-regular, #606266);
+  --mcs-text-secondary: var(--el-text-color-secondary, #909399);
+  --mcs-text-placeholder: var(--el-text-color-placeholder, #a8abb2);
+  --mcs-text-muted: var(--el-text-color-secondary, #909399);
+  --mcs-border-lighter: var(--el-border-color-lighter, #ebeef5);
+  --mcs-fill-light: var(--el-fill-color-light, #f5f7fa);
+  --mcs-fill-lighter: var(--el-fill-color-lighter, #fafafa);
+  --mcs-radius-sm: 4px;
+  --mcs-gap-xs: 8px;
+  --mcs-gap-sm: 12px;
+  --mcs-gap-md: 16px;
+}

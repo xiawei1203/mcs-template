@@ -9,6 +9,25 @@ const service = axios.create({
     timeout: 120000 // request timeout
 })
 
+// 并行接口可能带回同一业务提示，短时间去重只弹一次。
+const recentBizMessages = new Map()
+const BIZ_MESSAGE_DEDUPE_MS = 2000
+
+function notifyBizMessage(message, type = 'error') {
+    const text = message || '操作失败'
+    const now = Date.now()
+    const lastAt = recentBizMessages.get(text) || 0
+    if (now - lastAt < BIZ_MESSAGE_DEDUPE_MS) {
+        return
+    }
+    recentBizMessages.set(text, now)
+    ElMessage({
+        message: text,
+        type,
+        duration: 3 * 1000
+    })
+}
+
 // request interceptor
 service.interceptors.request.use(
     config => {
@@ -56,18 +75,10 @@ service.interceptors.response.use(
                 })
             })
         } else if (res.status === 403) {
-            ElMessage({
-                message: res.msg || '操作失败',
-                type: 'error',
-                duration: 3 * 1000
-            })
+            notifyBizMessage(res.msg || '操作失败')
             return Promise.reject(new Error(res.msg || '操作失败'))
         } else if (res.status == 500 || res.status == 502 || res.status == 503 || res.status == 504 || res.status == 400 || res.status == 404 || res.status == 405 || res.status == 408 || res.status == 415) {
-            ElMessage({
-                message: res.msg || '操作失败',
-                type: 'error',
-                duration: 3 * 1000
-            })
+            notifyBizMessage(res.msg || '操作失败')
             // 50008: Illegal token; 50012: Other clients logged in; 50014: Token expired;
 
             return Promise.reject(new Error(res.msg || '操作失败'))

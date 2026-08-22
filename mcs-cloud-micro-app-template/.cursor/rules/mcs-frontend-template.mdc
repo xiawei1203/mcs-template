@@ -1,0 +1,33 @@
+---
+description: 微前端子应用模板的样式分层、公共组件与目录规范；新增或修改 Vue 页面、组件、样式、API 时适用。
+globs: src/**/*.vue,src/**/*.js,src/**/*.scss
+alwaysApply: false
+---
+
+# 子应用模板 · 前端工程规范
+
+完整规范见仓库根目录 `agent.md`。以下是编码时必须遵守的硬性约束。
+
+## 公共组件优先
+
+`mcs-title`、`mcs-search`、`mcs-uploader`、`mcs-editor`、`mcs-user-picker`、`mcs-org-user-panel`、`mcs-space-tree-picker` 均已全局注册，直接用，不要自建同类结构。新增全局组件在 `src/components/index.js` 注册，且注册必须在 `app.mount()` 之前。
+
+## 平台接口
+
+- 组织 / 用户 / 字典 / 空间走 `src/api/common`，不要在业务模块再包一层同名请求。
+- 系统字典用 `useDict`，不要各页直接打 `getDictData`。
+- 选负责人用 `mcs-user-picker`；弹框内单选/多选人用 `mcs-org-user-panel`。
+- 选空间用 `mcs-space-tree-picker`，锁定提示走 `disabledReason`，不要写死业务文案。
+- 查询空值用 `cleanQuery`，主键用 `toId`，附件下载用 `downloadAttachment`。
+
+## 请求
+
+- 只通过 `src/utils/request.js` 发起请求；API 文件只导出语义化函数。
+- 查询参数归一化（日期区间拆分、空值剔除）放 API 层。
+- 错误提示复用拦截器，`catch` 里只做本地兜底。
+
+## 样式
+
+- 颜色、间距、圆角用 `var(--mcs-*)` 或 Element Plus CSS 变量。
+- 只读信息栅格用 `.mcs-info-grid`，不要复制一份详情布局。
+- 同一段样式在两个以上 SFC 复制时提取到 `src/styles`。

@@ -42,6 +42,14 @@
       <el-form-item label="用户池" prop="userPoolId">
         <el-input v-model="formDetail.userPoolId" placeholder="请输入用户池" />
       </el-form-item>
+      <el-form-item label="负责人">
+        <mcs-user-picker
+          v-model="formDetail.ownerUserId"
+          v-model:display-name="formDetail.ownerUserName"
+          placeholder="请选择负责人"
+          :teleported="false"
+        />
+      </el-form-item>
       <el-form-item label="年纪" prop="age">
         <el-input v-model="formDetail.age" type="textarea" placeholder="请输入内容" />
       </el-form-item>

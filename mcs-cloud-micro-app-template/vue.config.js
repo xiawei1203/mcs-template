@@ -46,6 +46,10 @@ module.exports = defineConfig({
         target:"http://192.168.0.198:31010", //其他应用代理
         changeOrigin:true,
       },
+      "/spatialmap":{
+        target:"http://192.168.0.198:31010", //空间服务代理
+        changeOrigin:true,
+      },
     }
   },
   // 自定义webpack配置

@@ -43,7 +43,7 @@
 <script>
   import UploaderFile from "../ui/file.vue";
   import { Plus, ZoomIn, Download, Delete,UploadFilled,Picture as IconPicture} from '@element-plus/icons-vue'
-  import {  ElLoading} from "element-plus";
+  import { downloadAttachment } from '@/utils/attachmentFiles'
   const COMPONENT_NAME = 'picture-files'
 
   export default {
@@ -105,23 +105,11 @@
         this.uploader.uploader.removeFile(file)
       },
       downloadImage(file) {
-        const loading = ElLoading.service({ fullscreen: true })
-        fetch(this.getImageUrl(file)).then(async res => await res.blob()).then((blob) => {
-          // 创建隐藏的可下载链接
-          const a = document.createElement('a');
-          a.style.display = 'none';
-          a.href = URL.createObjectURL(blob);
-          // 保存下来的文件名
-          a.download = file.name;
-          document.body.appendChild(a);
-          loading.close()
-          a.click();
-          // 移除元素
-          document.body.removeChild(a);
-        }).catch(() => {
-          this.$message.error(`下载失败`);
-          loading.close()
-        })
+        downloadAttachment({
+          objectName: file.objectName,
+          name: file.name,
+          fileUrl: this.getImageUrl(file)
+        }, { fileName: file.name })
       }
     }
   }

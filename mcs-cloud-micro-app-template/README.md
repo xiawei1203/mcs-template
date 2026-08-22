@@ -95,3 +95,33 @@ services:
 ### 5.2 直接部署
 
 将发布后的文件，直接复制到服务器中
+
+## 六、工程结构与公共能力
+
+编码规范见 [agent.md](./agent.md)，AI 辅助编码规则见 `.cursor/rules/`。
+
+```
+src/
+  api/common/        跨模块通用接口（组织树、用户列表、系统字典、空间树）
+  components/        全局注册的公共组件
+  hooks/             pager、detailer、useDict、useOrgUsers
+  utils/             request、attachmentFiles、query、校验、格式化
+  styles/            variables（设计 token）、common（通用 class）
+```
+
+### 公共接口
+
+| 模块 | 路径 | 用途 |
+| --- | --- | --- |
+| 组织 | `src/api/common/organization.js` | 组织/部门树、详情、展平为下拉项 |
+| 用户 | `src/api/common/user.js` | 人员列表（`/admin/v1/user/list`）、详情、展示名 |
+| 字典 | `src/api/common/dict.js` | 只读系统字典，页面通过 `useDict` 取选项 |
+| 空间 | `src/api/common/space.js` | 空间树 / 详情 / 类型，走 `/spatialmap` |
+
+系统字典用 `useDict`，不要各页直接打 `getDictData`。查询参数空值剔除、雪花 id 转字符串、请求号生成见 `src/utils/query.js`。附件地址解析与鉴权下载见 `src/utils/attachmentFiles.js`。
+
+### 公共组件
+
+`mcs-title`、`mcs-search`、`mcs-uploader`、`mcs-editor`、`mcs-user-picker`、`mcs-org-user-panel`、`mcs-space-tree-picker` 已全局注册，模板中直接使用。参数说明见 [agent.md](./agent.md) 的「公共组件速查」。
+
+示例页 `src/views/testt/index.vue` 的新增/编辑弹框已用 `mcs-user-picker` 示范选负责人。状态、分类等枚举仍写在模块 `constants.js`，不要在示例里强绑某个线上字典编号。
