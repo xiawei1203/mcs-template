@@ -121,13 +121,13 @@ services:
 
 ```
 src/
-  api/common/        跨模块通用接口（组织树、用户列表）
+  api/common/        跨模块通用接口（组织树、用户列表、系统字典、空间树）
   components/        全局注册的公共组件
-  hooks/             pager（列表分页）、detailer（详情）、useAutoTableHeight（表格高度自适应）
+  hooks/             pager、detailer、useAutoTableHeight、useDict、useOrgUsers
   router/            路由实例、本地调试菜单、隐藏页
   store/             Vuex 与主应用下发的全局状态
   styles/            variables（设计 token）、common（通用 class）、page-shell（页面骨架）、element-overrides（组件库覆盖）
-  utils/             request（含 json-bigint 大整数解析）、校验、格式化
+  utils/             request（含 json-bigint）、attachmentFiles、query、校验、格式化
   views/demo/        示例模块：列表 + 弹框表单 + 抽屉表单 + 抽屉详情 + 路由化详情/表单
 ```
 
@@ -144,7 +144,9 @@ src/
 
 ### 公共组件
 
-`mcs-title`、`mcs-search`、`mcs-table-empty`、`mcs-dialog`、`mcs-drawer`、`mcs-section-card`、`mcs-status-tag`、`mcs-stats-grid`、`mcs-kpi-card`、`mcs-tag-select`、`mcs-uploader`、`mcs-editor` 已全局注册，模板中直接使用。参数说明见 [agent.md](./agent.md) 的「公共组件速查」。
+`mcs-title`、`mcs-search`、`mcs-table-empty`、`mcs-dialog`、`mcs-drawer`、`mcs-section-card`、`mcs-status-tag`、`mcs-stats-grid`、`mcs-kpi-card`、`mcs-tag-select`、`mcs-uploader`、`mcs-editor`、`mcs-user-picker`、`mcs-org-user-panel`、`mcs-space-tree-picker` 已全局注册，模板中直接使用。参数说明见 [agent.md](./agent.md) 的「公共组件速查」。
+
+系统字典用 `useDict`，不要各页直接打 `getDictData`。查询空值用 `cleanQuery`，主键用 `toId`，附件下载用 `downloadAttachment`。示例抽屉表单已用 `mcs-user-picker` 示范选负责人；状态/分类仍用模块 `constants.js`，不在 demo 强绑某个线上字典编号。
 
 ### 标准列表页
 

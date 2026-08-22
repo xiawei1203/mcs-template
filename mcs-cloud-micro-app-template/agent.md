@@ -20,9 +20,9 @@
 
 ## 目录职责
 
-- `src/api`：跨模块通用接口（`src/api/common` 下为组织、用户等公共能力）。业务模块自己的接口放在 `src/views/<模块>/api/`。
+- `src/api`：跨模块通用接口（`src/api/common` 下为组织、用户、字典、空间等公共能力）。业务模块自己的接口放在 `src/views/<模块>/api/`。
 - `src/components`：跨页面复用的通用组件，全部在 `src/components/index.js` 全局注册。
-- `src/hooks`：可复用的组合式逻辑（`pager.js` 列表分页、`detailer.js` 详情、`useAutoTableHeight.js` 表格高度自适应）。
+- `src/hooks`：可复用的组合式逻辑（`pager.js` 列表分页、`detailer.js` 详情、`useAutoTableHeight.js` 表格高度自适应、`useDict.js` 系统字典、`useOrgUsers.js` 组织人员）。
 - `src/router`：路由实例、本地调试菜单 `constantRoutes.js`、隐藏页 `hiddenRoutes.js`。
 - `src/store`：Vuex store 与主应用下发的全局状态。
 - `src/styles`：设计 token、公共 class、页面骨架、Element Plus 覆盖。
@@ -49,7 +49,7 @@ src/views/<module>/
 ### 分层与优先级
 
 1. **设计 token**：`src/styles/variables.scss`。颜色、渐变、圆角、间距、阴影、表格与 KPI 配色全部在这里，页面和组件只允许 `var(--mcs-*)` 引用。
-2. **通用 class**：`src/styles/common.scss`。`section-card`、`section-card__title`、`section-dot`、`dialog-body`、`drawer-body`、`status-dot`、`progress-cell`、`cell-muted`、`mcs-tag` 等。
+2. **通用 class**：`src/styles/common.scss`。`section-card`、`section-card__title`、`section-dot`、`dialog-body`、`drawer-body`、`status-dot`、`progress-cell`、`cell-muted`、`mcs-info-grid`、`mcs-tag` 等。
 3. **页面骨架**：`src/styles/page-shell.scss`。`page-container mcs-page` 下的 `mcs-title`、`mcs-search`、`page-body`、`panel`、`filter-bar`、`tabs-bar`、`stats-grid`、`kpi`、`table-box`、`pagination-box`、`page-footer`。
 4. **组件库覆盖**：`src/styles/element-overrides.scss`。`.mcs-dialog`、`.mcs-drawer` 皮肤与表格空态。
 
@@ -98,6 +98,9 @@ page-container mcs-page      // 页面容器，自动获得底色、整卡填满
 | `mcs-tag-select` | 标签式选择 | `v-model`、`options`、`multiple`、`clearable` |
 | `mcs-uploader` | 文件 / 图片上传 | `v-model`、`groupId`、`listType`、`limit`、`multiple` |
 | `mcs-editor` | 富文本 | `v-model`、`groupId`、`editorHeight`、`disabled` |
+| `mcs-user-picker` | 部门树 + 人员单选（Popover） | `v-model`、`displayName`、`teleported`、`clearable` |
+| `mcs-org-user-panel` | 部门树 + 人员单选/多选面板 | `mode`（radio/checkbox）、`selectedUsers`、`excludeUserIds`、`lockedUserIds`、`lockedTagText`、`disabledTagText` |
+| `mcs-space-tree-picker` | 空间单选树 | `v-model`、`projectSpaceIds`、`availableSpaceIds`、`showDetail`、`disabled`、`disabledReason` |
 
 `mcs-stats-grid`、`mcs-kpi-card` 的样式定义在 `page-shell.scss`，必须放在 `page-container mcs-page` 内使用。
 
@@ -107,14 +110,18 @@ page-container mcs-page      // 页面容器，自动获得底色、整卡填满
   - `submit` / `formDetailRef` 只适用于表单内联在列表页的场景；表单抽到子组件时由子组件自管校验与提交，通过 `@success` 通知列表刷新。
   - `reset` 会清空 `form` 的全部 key，页面有默认筛选值时用本地 `defaultQuery()` 复位后调 `findSearch()`。
 - `useAutoTableHeight({ watchSources })`：把 `tableWrapRef` 绑到 `.table-box`，`tableHeight` 绑到 `el-table` 的 `height`，表格随容器自适应且不出现双滚动条。
+- `useDict(dictTypes)`：系统字典缓存与在途去重。返回 `load` / `options` / `resolveLabel` / `resolveLabels`。页面不要各自打 `getDictData`。
+- `useOrgUsers()`：组织树与按部门缓存的人员列表，供选人器与选人面板共用。
 - 表单在弹框、抽屉、表单页多处复用时，把字段初值、校验规则、详情回填、提交收敛到模块内的组合式函数（参考 `src/views/demo/useDemoForm.js`）。
 
 ## 请求规范
 
 - 所有业务请求通过 `src/utils/request.js` 发起，复用统一 baseURL、鉴权头、大整数解析与错误提示。
 - 响应已接入 json-bigint（`storeAsString: true`），后端 Long 主键到前端是字符串，比较与传参时不要 `Number()` 转换。
-- API 文件只暴露语义化函数；查询参数归一化（日期区间拆分、空值剔除）在 API 层完成，页面不拼底层请求配置。
+- API 文件只暴露语义化函数；查询参数归一化（日期区间拆分、空值剔除）在 API 层完成，页面不拼底层请求配置。可用 `cleanQuery` 去掉空串 / null / undefined，主键用 `toId` 转字符串。
 - 分页字段兼容 `rows` 与 `records`（`pager.js` 已统一处理）。
+- 附件预览 / 下载用 `resolveFileUrl` / `downloadAttachment`，不要在页面里手写 fetch blob。
+- 相同业务错误 2 秒内只弹一次。
 - 错误提示复用拦截器，`catch` 中只做本地兜底（清空数据、结束 loading），不重复弹提示。
 
 ## 路由与微前端规范
